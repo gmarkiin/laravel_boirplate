@@ -36,62 +36,51 @@ down: ## Put the project DOWN
 	docker compose down
 
 unlog: ## Clear log file
-	docker compose exec home-nginx bash -c "echo '' > storage/logs/laravel.log"
+	docker compose exec nginx bash -c "echo '' > storage/logs/laravel.log"
 
 tinker: ## Start tinker
-	docker compose exec --user application home-nginx bash -c "php artisan tinker"
+	docker compose exec --user application nginx bash -c "php artisan tinker"
 
 ##@ Bash shortcuts
 
 bash: ## Enter bash nginx container
-	docker compose exec --user application home-nginx bash
+	docker compose exec --user application nginx bash
 
 nginx: ## Enter bash nginx container
-	docker compose exec --user application home-nginx bash
+	docker compose exec --user application nginx bash
 
 mysql: ## Enter bash mysql container
-	docker compose exec home-mysql bash
+	docker compose exec mysql bash
 
 ##@ Database tools
 
 migration: ## Create migration file
-	docker compose exec --user application home-nginx bash -c "php artisan make:migration $(name)"
-	docker compose exec --user application home-nginx bash -c "php artisan make:request RegisterPostRequest"
+	docker compose exec --user application nginx bash -c "php artisan make:migration $(name)"
 
 migrate: ## Perform migrations
-	docker compose exec --user application home-nginx php artisan migrate
+	docker compose exec --user application nginx php artisan migrate
 
 fresh: ## Perform migrations
-	docker compose exec --user application home-nginx php artisan migrate:fresh
+	docker compose exec --user application nginx php artisan migrate:fresh
 
 rollback: ## Rollback migration
-	docker compose exec --user application home-nginx php artisan migrate:rollback
+	docker compose exec --user application nginx php artisan migrate:rollback
 
 backup: ## Export database
-	docker compose exec home-mysql bash -c "/var/www/app/.scripts/backup.sh"
-
-restore: ## Import database
-	docker compose exec home-mysql bash -c "mysql --user=root --password=root home04 < /var/www/app/database/dump/FUNCTION.sql"
-	docker compose exec home-mysql bash -c "mysql --user=root --password=root home04 < /var/www/app/database/dump/TABLE.sql"
-	docker compose exec home-mysql bash -c "mysql --user=root --password=root home04 < /var/www/app/database/dump/VIEW.sql"
-	docker compose exec home-mysql bash -c "mysql --user=root --password=root home04 < /var/www/app/database/dump/DATA.sql"
-	$(MAKE) password
-
-password: ## Reset all passwords
-	docker compose exec home-mysql bash -c "mysql --user=home04 --password=123 home04 -e \"update TBL_USUARIO set usu_password = md5('aq1sw2de3')\""
+	docker compose exec mysql bash -c "/var/www/app/.scripts/backup.sh"
 
 ##@ Composer
 
 install: ## Composer install dependencies
-	docker compose exec --user application home-nginx bash -c "php artisan make:resource UserResource"
+	docker-compose exec emcash-nginx bash -c "su -c \"composer install\" application"
 
 update: ## Composer install dependencies
-	docker compose exec --user application home-nginx bash -c "composer update"
+	docker compose exec --user application nginx bash -c "composer update"
 
 autoload: ## Run the composer dump
-	docker compose exec --user application home-nginx bash -c "composer dump-autoload"
+	docker compose exec --user application nginx bash -c "composer dump-autoload"
 
 ##@ General commands
 
 route: ## List the routes of the app
-	docker compose exec --user application home-nginx php artisan route:list
+	docker compose exec --user application nginx php artisan route:list
