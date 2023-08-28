@@ -9,24 +9,24 @@ networks:
 # Volumes
 volumes:
   # MySQL volume
-  home-mysql_data:
+  mysql_data:
     driver: local
   # Redis volume
-  home-redis_data:
+  redis_data:
     driver: local
 
 # Services
 services:
 
   # MySQL
-  home-mysql:
+  mysql:
     image: mysql:5.7
-    container_name: home-mysql
+    container_name: mysql
     networks:
       - internal
     volumes:
       - .:/var/www/app
-      - home-mysql_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     working_dir: /var/www/app
     environment:
       - MYSQL_ROOT_PASSWORD=root
@@ -37,17 +37,17 @@ services:
       - "3306:3306"
 
   # Nginx
-  home-nginx:
+  nginx:
     image: webdevops/php-nginx:8.2
-    container_name: home-nginx
+    container_name: nginx
     networks:
       - internal
     depends_on:
-      - home-mysql
-      - home-redis
+      - mysql
+      - redis
     links:
-      - home-mysql
-      - home-redis
+      - mysql
+      - redis
     volumes:
       - .:/var/www/app
     working_dir: /var/www/app
@@ -62,13 +62,13 @@ services:
       - "8080:80"
 
   # Redis
-  home-redis:
+  redis:
     image: redis:6
-    container_name: home-redis
+    container_name: redis
     command: --append only yes
     networks:
       - internal
     volumes:
-      - home-redis_data:/data
+      - redis_data:/data
     ports:
       - "6379:6379"
