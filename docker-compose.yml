@@ -31,14 +31,14 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=database
-      - MYSQL_USER=username
-      - MYSQL_PASSWORD=password
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pass
     ports:
       - "3306:3306"
 
   # Nginx
   home-nginx:
-    image: webdev-ops/php-nginx:8.2
+    image: webdevops/php-nginx:8.2
     container_name: home-nginx
     networks:
       - internal
