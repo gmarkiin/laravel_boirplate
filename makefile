@@ -10,7 +10,7 @@ init: ## Start a new development environment
 	cp .env.example .env
 	$(MAKE) dev
 	@sleep 10
-	$(MAKE) restore
+	$(MAKE) keys
 	$(MAKE) install
 	$(MAKE) migrate
 
