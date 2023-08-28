@@ -19,6 +19,9 @@ init: ## Start a new development environment
 dev: ## Start containers detached
 	docker compose up -d
 
+keys: ## Gerando secret keys
+	docker-compose exec nginx bash -c "su -c 'php artisan key:generate' application"
+
 logs: ## Show the output logs
 	docker compose logs
 
