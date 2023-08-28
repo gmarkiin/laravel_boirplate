@@ -34,11 +34,11 @@ services:
       - MYSQL_USER=username
       - MYSQL_PASSWORD=password
     ports:
-      - 3306:3306
+      - "3306:3306"
 
   # Nginx
   home-nginx:
-    image: webdevops/php-nginx:8.2
+    image: webdev-ops/php-nginx:8.2
     container_name: home-nginx
     networks:
       - internal
@@ -59,17 +59,16 @@ services:
     expose:
       - 9090
     ports:
-      - 8080:80
+      - "8080:80"
 
   # Redis
   home-redis:
     image: redis:6
     container_name: home-redis
-    command: --appendonly yes
+    command: --append only yes
     networks:
       - internal
     volumes:
       - home-redis_data:/data
     ports:
-      - 6379:6379
-      - home-redis_data:/data
+      - "6379:6379"
