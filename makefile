@@ -72,7 +72,7 @@ backup: ## Export database
 ##@ Composer
 
 install: ## Composer install dependencies
-	docker-compose exec emcash-nginx bash -c "su -c \"composer install\" application"
+	docker compose exec nginx bash -c "su -c \"composer install\" application"
 
 update: ## Composer install dependencies
 	docker compose exec --user application nginx bash -c "composer update"
